@@ -33,13 +33,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>P2DEngine.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="P2DGame.cs" />
+    <Compile Include="Games\Arkanoid\Arkanoid.cs" />
+    <Compile Include="Engine\Block.cs" />
+    <Compile Include="Engine\P2DGame.cs" />
+    <Compile Include="Games\Pong\PongGame.cs" />
+    <Compile Include="Engine\P2DInputManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="P2DWindow.cs">
       <SubType>Form</SubType>

@@ -9,12 +9,13 @@ using System.Windows.Forms;
 namespace P2DEngine
 {
     public class P2DWindow : Form
-    {
-        private List<Keys> pressedKeys;
+    { 
+
+        //Para el double búfer.
+        BufferedGraphicsContext GraphicsManager;
+        BufferedGraphics ManagedBackBuffer;
 
         public P2DWindow(int width, int height) {
-
-            pressedKeys = new List<Keys>(); // Lista de teclas presionadas.
 
             // Propio de Forms.
             ClientSize = new Size(width, height); // Tamaño de la ventana.
@@ -22,31 +23,36 @@ namespace P2DEngine
             FormBorderStyle = FormBorderStyle.FixedSingle; // Esto hace que aparezca la barra de arriba para minimizar,
             //cerrar, etc.
 
+            // Doble búfer. Si tocan el código se pudre todo.
+            GraphicsManager = BufferedGraphicsManager.Current;
+            GraphicsManager.MaximumBuffer = new Size(width + 1, height + 1);
+            ManagedBackBuffer = GraphicsManager.Allocate(CreateGraphics(), ClientRectangle);
+
             // Propio de Forms.
             KeyDown += _KeyDown;
             KeyUp += _KeyUp;
 
         }
 
+        public Graphics GetGraphics()
+        {
+            ManagedBackBuffer.Graphics.Clear(Color.Black);
+            return ManagedBackBuffer.Graphics;
+        }
+
+        public void Render()
+        {
+            ManagedBackBuffer?.Render();
+        }
+
         private void _KeyDown(object sender, KeyEventArgs e)
         {
-            if (!pressedKeys.Contains(e.KeyCode)) // Si no está presionando la tecla.
-            {
-                pressedKeys.Add(e.KeyCode); // Ahora la está presionando.
-            }
+            P2DInputManager.KeyDown(e.KeyCode);
         }
 
         private void _KeyUp(object sender, KeyEventArgs e)
         {
-            if (pressedKeys.Contains(e.KeyCode)) // Si estaba presionando la tecla.
-            {
-                pressedKeys.Remove(e.KeyCode); // Ahora no la está presionando.
-            }
-        }
-
-        public bool IsKeyPressed(Keys keys) // Preguntamos si está la tecla presionada.
-        {
-            return pressedKeys.Contains(keys);
+            P2DInputManager.KeyUp(e.KeyCode);
         }
 
     }
