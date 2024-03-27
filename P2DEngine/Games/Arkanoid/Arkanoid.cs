@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace P2DEngine
 {
-    public class Arkanoid : P2DGame
+    public class Arkanoid : P2DGame // Le recomiendo copiar y pegar el código de su LAB 2 aquí (y obviamente, adaptarlo para que funcione con las nuevas implementaciones hechas en clase)
     {
         public Arkanoid(int width, int height, int targetFPS) : base(width, height, targetFPS)
         {
@@ -25,7 +25,7 @@ namespace P2DEngine
 
         protected override void UpdateGame()
         {
-           
+
         }
     }
 }

@@ -10,8 +10,7 @@ namespace P2DEngine
     // Clase que maneja todas las entradas el jugador.
     public class P2DInputManager
     {
-        public static List<Keys> pressedKeys = new List<Keys>(); // Lista de teclas presionadas.
-
+        public static List<Keys> pressedKeys = new List<Keys>(); // Lista de teclas presionadas. 
         public static bool IsKeyPressed(Keys keys) // Preguntamos si está la tecla presionada.
         {
             return pressedKeys.Contains(keys);

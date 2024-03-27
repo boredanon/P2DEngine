@@ -39,9 +39,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\P2DAudioManager.cs" />
+    <Compile Include="Engine\P2DImageManager.cs" />
+    <Compile Include="Engine\P2DMouseManager.cs" />
     <Compile Include="Games\Arkanoid\Arkanoid.cs" />
     <Compile Include="Engine\Block.cs" />
     <Compile Include="Engine\P2DGame.cs" />
+    <Compile Include="Games\Arkanoid\MouseControl.cs" />
     <Compile Include="Games\Pong\PongGame.cs" />
     <Compile Include="Engine\P2DInputManager.cs" />
     <Compile Include="Program.cs" />

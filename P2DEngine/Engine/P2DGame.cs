@@ -27,7 +27,6 @@ namespace P2DEngine
             windowWidth = width;
             FPS = targetFPS;
             targetTime = 1000 / targetFPS;
-            
         }
 
         // Iniciamos la lógica del motor.

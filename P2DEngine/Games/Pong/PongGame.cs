@@ -34,21 +34,21 @@ namespace P2DEngine
         // Es recomentable utilizar el constructor para inicializar las variables.
         public PongGame(int width, int height, int targetFPS) : base(width, height, targetFPS) {
             ObjectList = new List<Block>();
-            ball = new Block(width/2, height/2, 20, 20);
+            ball = new Block(width/2, height/2, 20, 20, Color.Black);
 
             // La velocidad inicial.
             ballDx = 1;
             ballDy = 1;
 
-            player = new Block(20, 0, 20, 100);
-            opponent = new Block(width - 40, height / 2, 20, 100);
+            player = new Block(20, 0, 20, 100, Color.Black);
+            opponent = new Block(width - 40, height / 2, 20, 100, Color.Black);
 
             // Añadimos a la lista 5 bloques para probar.
-            ObjectList.Add(new Block(100, 100, 50, 50));
-            ObjectList.Add(new Block(300, 300, 50, 50));
-            ObjectList.Add(new Block(400, 400, 50, 50));
-            ObjectList.Add(new Block(600, 500, 50, 50));
-            ObjectList.Add(new Block(250, 250, 50, 50));
+            ObjectList.Add(new Block(100, 100, 50, 50, Color.Black));
+            ObjectList.Add(new Block(300, 300, 50, 50, Color.Black));
+            ObjectList.Add(new Block(400, 400, 50, 50, Color.Black));
+            ObjectList.Add(new Block(600, 500, 50, 50, Color.Black));
+            ObjectList.Add(new Block(250, 250, 50, 50, Color.Black));
 
             IADy = 1;
         }
@@ -196,7 +196,7 @@ namespace P2DEngine
 
             if(P2DInputManager.IsKeyPressed(Keys.Space)) // Si presionamos el espacio, haremos que se dibuje un nuevo bloque.
             {
-                ObjectList.Add(new Block(0, 0, 50, 50));
+                ObjectList.Add(new Block(0, 0, 50, 50, Color.Black));
             }
         }
     }

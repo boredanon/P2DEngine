@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using P2DEngine.Engine;
 
 namespace P2DEngine
 {
@@ -32,8 +33,14 @@ namespace P2DEngine
             KeyDown += _KeyDown;
             KeyUp += _KeyUp;
 
+            // Propio de forms, para obtener los datos del mouse.
+            MouseMove += _MouseMove;
+            MouseDown += _MouseDown;
+            MouseUp += _MouseUp;
+
         }
 
+        // No les recomiendo tocar los métodos de este archivo.
         public Graphics GetGraphics()
         {
             ManagedBackBuffer.Graphics.Clear(Color.Black);
@@ -42,9 +49,11 @@ namespace P2DEngine
 
         public void Render()
         {
-            ManagedBackBuffer?.Render();
+            if(ManagedBackBuffer != null)
+                ManagedBackBuffer?.Render();
         }
 
+        // Para evaluar si una tecla se presionó o se soltó.
         private void _KeyDown(object sender, KeyEventArgs e)
         {
             P2DInputManager.KeyDown(e.KeyCode);
@@ -53,6 +62,22 @@ namespace P2DEngine
         private void _KeyUp(object sender, KeyEventArgs e)
         {
             P2DInputManager.KeyUp(e.KeyCode);
+        }
+
+        // Para evaluar los datos del mouse.
+        private void _MouseDown(object sender, MouseEventArgs e)
+        {
+            P2DMouseManager.MouseDown(e.Button);
+        }
+
+        private void _MouseUp(object sender, MouseEventArgs e)
+        {
+            P2DMouseManager.MouseUp(e.Button);
+        }
+
+        private void _MouseMove(object sender, MouseEventArgs e)
+        {
+            P2DMouseManager.MouseMove(e.Location);
         }
 
     }
