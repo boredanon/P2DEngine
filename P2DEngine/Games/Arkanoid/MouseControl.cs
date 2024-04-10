@@ -49,6 +49,8 @@ namespace P2DEngine.Games.Arkanoid
 
 
             bg = P2DImageManager.Get("Background"); // Obtenemos la imagen anteriormente guardada
+
+            P2DAudioManager.Play("background_music");
         }
 
         protected override void ProcessInput()

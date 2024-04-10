@@ -15,6 +15,8 @@ namespace P2DEngine
 
             P2DAudioManager.Load("Bouncing.wav", "bounce");
 
+            P2DAudioManager.Load("Background.wav", "background_music");
+
             //Arkanoid game = new Arkanoid(800, 600, 60);
             MouseControl game = new MouseControl(800, 600, 60);
             

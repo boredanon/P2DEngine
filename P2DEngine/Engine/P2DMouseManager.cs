@@ -28,12 +28,12 @@ namespace P2DEngine.Engine
         }
 
         // Si se detecta que uno de los botones del mouse ha sido soltado.
-        public static void MouseUp(MouseButtons b) { 
-            if(b == MouseButtons.Left && isLeftButtonDown) // Si fue el izquierdo.
+        public static void MouseUp(MouseButtons b) {
+            if (b == MouseButtons.Left && isLeftButtonDown) // Si fue el izquierdo.
             {
                 isLeftButtonDown = false;
             }
-            else if(b == MouseButtons.Right && isRightButtonDown) // Si fue el derecho.
+            else if (b == MouseButtons.Right && isRightButtonDown) // Si fue el derecho.
             {
                 isRightButtonDown = false;
             }
