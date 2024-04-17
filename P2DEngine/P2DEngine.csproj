@@ -40,15 +40,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine\P2DAudioManager.cs" />
-    <Compile Include="Engine\P2DImageManager.cs" />
-    <Compile Include="Engine\P2DMouseManager.cs" />
-    <Compile Include="Games\Arkanoid\Arkanoid.cs" />
-    <Compile Include="Engine\Block.cs" />
-    <Compile Include="Engine\P2DGame.cs" />
-    <Compile Include="Games\Arkanoid\MouseControl.cs" />
-    <Compile Include="Games\Pong\PongGame.cs" />
-    <Compile Include="Engine\P2DInputManager.cs" />
+    <Compile Include="Engine\MouseBlock.cs" />
+    <Compile Include="Engine\P2DBlock.cs" />
+    <Compile Include="Engine\Managers\P2DAudioManager.cs" />
+    <Compile Include="Engine\P2DCircle.cs" />
+    <Compile Include="Engine\Managers\P2DImageManager.cs" />
+    <Compile Include="Engine\Managers\P2DMouseManager.cs" />
+    <Compile Include="Engine\GameComponents\P2DGameObject.cs" />
+    <Compile Include="Engine\GameComponents\P2DGame.cs" />
+    <Compile Include="Engine\GravityCircle.cs" />
+    <Compile Include="Engine\P2DTriangle.cs" />
+    <Compile Include="Games\Clases\Clase1604.cs" />
+    <Compile Include="Engine\Managers\P2DInputManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="P2DWindow.cs">
       <SubType>Form</SubType>
@@ -92,5 +95,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

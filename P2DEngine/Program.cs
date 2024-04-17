@@ -14,11 +14,10 @@ namespace P2DEngine
             P2DImageManager.Load("Blue.png", "Blue");
 
             P2DAudioManager.Load("Bouncing.wav", "bounce");
-
             P2DAudioManager.Load("Background.wav", "background_music");
 
-            //Arkanoid game = new Arkanoid(800, 600, 60);
-            MouseControl game = new MouseControl(800, 600, 60);
+            //Creamos la instancia de juego. Recuerde que le pasa la resolución y los FPS.
+            Clase1604 game = new Clase1604(800, 600, 60);
             
             game.Start(); // Iniciamos el juego.
 

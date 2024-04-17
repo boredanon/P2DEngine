@@ -18,6 +18,7 @@ namespace P2DEngine
         protected int windowWidth { get; set; }
         protected int targetTime { get; set; }
         protected int FPS { get; set; }
+        protected float DeltaTime { get; set; }
 
         // Para construir el juego, necesitamos el ancho y alto de la pantalla junto a los FPS.
         public P2DGame(int width, int height, int targetFPS)
@@ -55,15 +56,14 @@ namespace P2DEngine
                 mainWindow.Render();
                 sw.Stop();
 
-                int deltaTime = (int)sw.ElapsedMilliseconds; // Tiempo que demora en una iteración del loop.
+                DeltaTime = (float)sw.Elapsed.TotalMilliseconds; // Tiempo que demora en una iteración del loop.
+                double sleepTime = targetTime - DeltaTime; // Cuanto debe "dormir" 
 
-                int sleepTime = targetTime - deltaTime; // Cuanto debe "dormir" 
-
-                if (sleepTime < 0) // Dejaremos que el loop duerma mínimo un milisegundo.
+                if (sleepTime <= 0) // Dejaremos que el loop duerma mínimo un milisegundo.
                 {
                     sleepTime = 1;
                 }
-                Thread.Sleep(sleepTime);
+                Thread.Sleep((int)sleepTime);
 
                 if (mainWindow.IsDisposed) // Si cerramos la ventana, se cierra el juego.
                 {
