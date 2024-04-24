@@ -10,10 +10,10 @@ namespace P2DEngine.Engine
     public class P2DCircle : P2DGameObject
     {
         // Sólo color.
-        public P2DCircle(int X, int Y, int radius, Color color) : base(X, Y, radius*2, radius*2, color){}
+        public P2DCircle(int X, int Y, int radius, Color color) : base(X, Y, radius*2, radius*2, 0,color){}
         
         // Con imagen.
-        public P2DCircle(int X, int Y, int radius, Image image) : base(X, Y, radius*2, radius*2, image){}
+        public P2DCircle(int X, int Y, int radius, Image image) : base(X, Y, radius*2, radius*2, 0, image){}
         
         public override void Update(float DeltaTime)
         {
@@ -21,7 +21,7 @@ namespace P2DEngine.Engine
 
         public override void Draw(Graphics g)
         {
-            if(Image == null)
+            if(Image == null) // Aquí no implementamos rotación porque... es un círculo.
             {
                 var colorBrush = new SolidBrush(Color);
                 g.FillEllipse(colorBrush, Position.X, Position.Y, Size.X, Size.Y);

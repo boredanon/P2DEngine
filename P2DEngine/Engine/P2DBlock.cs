@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +11,9 @@ namespace P2DEngine.Engine
     public class P2DBlock : P2DGameObject
     {
         // Solo colores.
-        public P2DBlock(int X, int Y, int width, int height, Color color) : base(X, Y, width, height, color){}
+        public P2DBlock(int X, int Y, int width, int height, float angle, Color color) : base(X, Y, width, height, angle, color){}
         // Con imágenes
-        public P2DBlock(int X, int Y, int width, int height, Image image) : base(X, Y, width, height, image){}
+        public P2DBlock(int X, int Y, int width, int height, float angle, Image image) : base(X, Y, width, height, angle, image){}
 
 
         public override void Draw(Graphics g)
@@ -20,11 +21,33 @@ namespace P2DEngine.Engine
             if (Image == null)
             {
                 var colorBrush = new SolidBrush(Color);
-                g.FillRectangle(colorBrush, Position.X, Position.Y, Size.X, Size.Y);
+
+                using(Matrix m = new Matrix()) // Todas las operaciones que hacemos en realidad son operaciones matriciales encubiertas, en este caso declaramos la matriz identidad.
+                {   
+                    m.RotateAt(Angle, 
+                        new PointF(Position.X + (Size.X/2), 
+                        Position.Y + (Size.Y/2))); // Rotamos esa matriz identidad (que en realidad es una multiplicación de matrices) con respecto al punto del medio.
+                   
+                    g.Transform = m; // Básicamente, rotamos todo el mundo.
+                    g.FillRectangle(colorBrush, Position.X, Position.Y, Size.X, Size.Y); // Dibujamos en el mundo rotado.
+                    g.ResetTransform(); // Volvemos el mundo a la normalidad.
+                }
+
+                
             }
             else
             {
-                g.DrawImage(Image, Position.X, Position.Y, Size.X, Size.Y);
+                using (Matrix m = new Matrix()) // Las imágenes siguen la misma lógica.
+                {
+                    m.RotateAt(Angle,
+                        new PointF(Position.X + (Size.X / 2),
+                        Position.Y + (Size.Y / 2)));
+
+                    g.Transform = m;
+                    g.DrawImage(Image, Position.X, Position.Y, Size.X, Size.Y);
+                    g.ResetTransform();
+                }
+
             }
         }
 

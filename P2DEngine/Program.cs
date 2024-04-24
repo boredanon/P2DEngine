@@ -1,5 +1,5 @@
 ﻿using P2DEngine.Engine;
-using P2DEngine.Games.Arkanoid;
+using P2DEngine.Games;
 using System.Windows.Forms;
 
 namespace P2DEngine
@@ -16,8 +16,8 @@ namespace P2DEngine
             P2DAudioManager.Load("Bouncing.wav", "bounce");
             P2DAudioManager.Load("Background.wav", "background_music");
 
-            //Creamos la instancia de juego. Recuerde que le pasa la resolución y los FPS.
-            Clase1604 game = new Clase1604(800, 600, 60);
+            //Creamos la instancia de juego. Recuerde que le pasa la resolución y los FPS. Ahora también le pasamos el tamaño del viewport.
+            Clase2304 game = new Clase2304(800, 600, new P2DViewport(0, 0, 800, 600), 60);
             
             game.Start(); // Iniciamos el juego.
 

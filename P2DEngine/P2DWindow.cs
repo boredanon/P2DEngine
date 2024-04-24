@@ -80,5 +80,46 @@ namespace P2DEngine
             P2DMouseManager.MouseMove(e.Location);
         }
 
+        public void ChangeSize(Form window, int width, int height)
+        {
+            if(window.InvokeRequired)
+            {
+                window.Invoke(new MethodInvoker(
+                    delegate {
+                        window.ClientSize = new Size(width, height);
+                        GraphicsManager.MaximumBuffer = new Size((width + 1), (height + 1));
+                        ManagedBackBuffer = GraphicsManager.Allocate(CreateGraphics(), ClientRectangle);
+                    }));
+            }
+        }
+
+        public void ChangeWidth(Form window, int width)
+        {
+            if (window.InvokeRequired)
+            {
+                window.Invoke(new MethodInvoker(
+                    delegate {
+                        var height = (width * window.ClientSize.Height) / window.ClientSize.Width;
+                        window.ClientSize = new Size(width, height);
+                        GraphicsManager.MaximumBuffer = new Size((width + 1), (height + 1));
+                        ManagedBackBuffer = GraphicsManager.Allocate(CreateGraphics(), ClientRectangle);
+                    }));
+            }
+        }
+
+        public void ChangeHeight(Form window, int height)
+        {
+            if (window.InvokeRequired)
+            {
+                window.Invoke(new MethodInvoker(
+                    delegate {
+                        var width = (height * window.ClientSize.Width) / window.ClientSize.Height;
+                        window.ClientSize = new Size(width, height);
+                        GraphicsManager.MaximumBuffer = new Size((width + 1), (height + 1));
+                        ManagedBackBuffer = GraphicsManager.Allocate(CreateGraphics(), ClientRectangle);
+                    }));
+            }
+        }
+
     }
 }
