@@ -14,7 +14,7 @@ namespace P2DEngine.Engine
 
         public GravityCircle(int X, int Y, int radius, Color color, bool useDeltaTime) : base(X, Y, radius, color)
         {
-            gravity = 9.81f;
+            gravity = 1f;
             this.useDeltaTime = useDeltaTime;
         }
 

@@ -1,4 +1,5 @@
-﻿using P2DEngine.Engine;
+﻿using NAudio.Wave;
+using P2DEngine.Engine;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -59,14 +60,33 @@ namespace P2DEngine.Games
             Instantiate(circle);
             Instantiate(gravityCircleWithDeltaTime);
             Instantiate(gravityCircleWithoutDeltaTime);
+            Instantiate(new GravityCircle(300, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(200, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(100, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(000, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(700, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(800, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(900, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(1000, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(1100, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(1300, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(1400, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(1500, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(1600, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(1700, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(1800, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(1900, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(2000, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(2100, 0, 30, Color.Blue, false));
+            Instantiate(new GravityCircle(2200, 0, 30, Color.Blue, false));
 
             // Pueden simplemente asignarlos mientras se construyen.
             Instantiate(triangle = new P2DTriangle(400, 400, 30, 30, 25, Color.White));
             
             // O pueden simplemente crear un nuevo elemento sin asignarlo a ninguna parte, en este caso, con una imagen.
             Instantiate(new P2DBlock(1000, 250, 100, 100, 30, P2DImageManager.Get("Background")));
-            
-            
+
+            P2DAudioManager.Play("background_music");
         }
 
         // Procesar los inputs del juego.
@@ -86,6 +106,7 @@ namespace P2DEngine.Games
         // Dibujar los elementos del juego.
         protected override void RenderGame(Graphics g)
         {
+            g.DrawImage(P2DImageManager.Get("Background"), 0, 0, mainWindow.ClientSize.Width, mainWindow.ClientSize.Height);
             // Vea el método RenderGame de P2DGame.
             base.RenderGame(g);
         }
@@ -94,7 +115,6 @@ namespace P2DEngine.Games
         {
             // Vea el método UpdateGame de P2DGame.
             base.UpdateGame();
-
 
             // Nota: Varios de estos métodos están implementados en P2DGame.cs
 
@@ -109,7 +129,7 @@ namespace P2DEngine.Games
 
             if(pressedSpace && !previousPressedSpace) // Cuando presionemos espacio, queremos que la pantalla cambie directamente a esta resolución, no necesariamente siguiendo la relación de aspecto.
             {
-                ChangeScreenSize(1600, 1200);
+                P2DAudioManager.Play("bounce");
             }
 
             // Presionando WASD, queremos que se mueva el viewport. en las 4 direcciones correspondientes.

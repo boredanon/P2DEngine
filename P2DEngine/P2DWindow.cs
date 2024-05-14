@@ -49,8 +49,14 @@ namespace P2DEngine
 
         public void Render()
         {
-            if(ManagedBackBuffer != null)
+            try
+            {
                 ManagedBackBuffer?.Render();
+            }
+            catch
+            {
+                Environment.Exit(0);
+            }
         }
 
         // Para evaluar si una tecla se presionó o se soltó.

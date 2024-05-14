@@ -55,6 +55,7 @@ namespace P2DEngine.Engine
                 MemoryStream stream = audios[soundId];
                 StreamMediaFoundationReader reader = new StreamMediaFoundationReader(stream); // Lo transforma a un formato que el WaveOutEvent puede correr.
                 WaveOutEvent sound = new WaveOutEvent();
+                sound.DesiredLatency = 100;
                 sound.Init(reader);
                 sound.Play();
 
