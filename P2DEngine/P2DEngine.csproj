@@ -41,8 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine\GameComponents\P2DBackgroundLayer.cs" />
+    <Compile Include="Engine\GameComponents\P2DButton.cs" />
+    <Compile Include="Engine\GameComponents\P2DScene.cs" />
     <Compile Include="Engine\GameComponents\P2DSprite.cs" />
+    <Compile Include="Engine\GameComponents\P2DUIObject.cs" />
     <Compile Include="Engine\Managers\P2DBackgroundManager.cs" />
+    <Compile Include="Engine\Managers\P2DSceneManager.cs" />
     <Compile Include="Engine\MouseBlock.cs" />
     <Compile Include="Engine\P2DBlock.cs" />
     <Compile Include="Engine\Managers\P2DAudioManager.cs" />
@@ -55,9 +59,10 @@
     <Compile Include="Engine\P2DTriangle.cs" />
     <Compile Include="Engine\GameComponents\P2DViewport.cs" />
     <Compile Include="Engine\Player.cs" />
-    <Compile Include="Games\Clases\Clase1405.cs" />
-    <Compile Include="Games\Clases\Clase2304.cs" />
+    <Compile Include="Games\Clases\Clase1106.cs" />
     <Compile Include="Engine\Managers\P2DInputManager.cs" />
+    <Compile Include="Games\Clases\Escenita.cs" />
+    <Compile Include="Games\Clases\Scene1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="P2DWindow.cs">
       <SubType>Form</SubType>

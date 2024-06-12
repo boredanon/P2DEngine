@@ -31,11 +31,8 @@ namespace P2DEngine
             P2DImageManager.Load("Test/D.png", "other_0");
             P2DImageManager.Load("Test/E.png", "other_1");
 
-
-
-
             //Creamos la instancia de juego. Recuerde que le pasa la resolución y los FPS. Ahora también le pasamos el tamaño del viewport.
-            Clase1405 game = new Clase1405(800, 600, new P2DViewport(0, 0, 800, 600), 60);
+            Clase1106 game = new Clase1106(800, 600, new P2DViewport(0, 0, 800, 600), 60);
             
             game.Start(); // Iniciamos el juego.
 

@@ -1,9 +1,11 @@
 ﻿using P2DEngine.Engine;
+using P2DEngine.Engine.GameComponents;
 using P2DEngine.Engine.Managers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,7 +17,7 @@ namespace P2DEngine
     //En esta clase irá toda la lógica necesaria para hacer cualquier juego.
     public abstract class P2DGame
     {
-        protected P2DWindow mainWindow; // Pantalla.
+        protected static P2DWindow mainWindow; // Pantalla.
 
         protected int windowHeight { get; set; }
         protected int windowWidth { get; set; }
@@ -23,9 +25,9 @@ namespace P2DEngine
         protected int FPS { get; set; }
         protected float DeltaTime { get; set; }
 
-        protected P2DViewport viewport { get; set; }
+        protected static P2DViewport viewport { get; set; }
 
-        protected PointF oldViewportSize { get; set; }
+        protected static PointF oldViewportSize { get; set; }
 
         public static PointF viewportSize { get; set;}
 
@@ -90,61 +92,33 @@ namespace P2DEngine
             Environment.Exit(0); // Propio de Forms.
         }
 
-        protected void Instantiate(P2DGameObject gameObject) // Añadir un objeto a la lista.
-        {
-            gameObjects.Add(gameObject);
-        }
-
-        protected void Destroy(P2DGameObject gameObject) // Remover un objeto de la lista.
-        {
-            gameObjects.Remove(gameObject);
-        }
-
+        
 
         // Todos los "hijos" de la clase P2DGame deberán implementar estos tres métodos, vea el archivo Arkanoid.cs para entender mejor.
-        protected abstract void ProcessInput();
+        protected virtual void ProcessInput()
+        {
+            // Solo procesamos el input de la escena actual. 
+            P2DSceneManager.GetActive().ProcessInput();
+
+            // DESAFÍO: Note que el método es "virtual", ¿cómo haría para que en ciertos juegos el input
+            // se pueda manejar en múltiples escenas?
+        }
+
         protected virtual void UpdateGame()
         {
-            foreach (var layer in P2DBackgroundManager.layers) // Actualizamos cada layer del fondo.
-            {
-                layer.Update(DeltaTime);
-            }
-
-            foreach (var gameObject in gameObjects) // Actualizamos cada objeto de la lista.
-            {
-                gameObject.Update(DeltaTime);
-            }
-
-            oldViewportSize = new PointF(viewport.Width, viewport.Height); // Actualizamos los tamaños del viewport.
+            // Actualizamos los tamaños del viewport. Si lo quita se rompe el juego.
+            oldViewportSize = new PointF(viewport.Width, viewport.Height); 
+            P2DSceneManager.GetActive().Update(DeltaTime);
         }
-        protected virtual void RenderGame(Graphics g)
+
+        protected void RenderGame(Graphics g)
         {
-            // Calculamos la relación de aspecto del viewport.
-            var xRatio = viewport.Width / oldViewportSize.X;
-            var yRatio = viewport.Height / oldViewportSize.Y;
-
-            foreach(var layer in P2DBackgroundManager.layers) // Dibujamos el fondo primero.
-            {
-                var position = layer.Position;
-                layer.Position = new PointF(layer.Position.X - viewport.X * xRatio,
-                                                layer.Position.Y - viewport.Y * yRatio);
-                layer.Draw(g);
-                layer.Position = position;
-            }
-
-
-            foreach (var gameObject in gameObjects) // Tenemos que dibujar cada elemento con respecto a su posición en el viewport ahora, piense en el viewport como una cámara.
-            {
-                var position = gameObject.Position;
-                gameObject.Position = new PointF(gameObject.Position.X - viewport.X * xRatio,
-                                                gameObject.Position.Y - viewport.Y * yRatio);
-                gameObject.Draw(g);
-                gameObject.Position = position;
-            }
+            //Pintamos la escena actual.
+            P2DSceneManager.GetActive().Render(g);
         }
 
         // Cambiar los tamaños de la ventana, respetando la relación de aspecto.
-        protected void ChangeScreenWidth(int width)
+        public static void ChangeScreenWidth(int width)
         {
             mainWindow.ChangeWidth(mainWindow, width);
             viewport.Width = mainWindow.ClientSize.Width;
@@ -155,7 +129,7 @@ namespace P2DEngine
             RescaleElements();
         }
 
-        protected void ChangeScreenHeight(int height)
+        public static void ChangeScreenHeight(int height)
         {
             mainWindow.ChangeHeight(mainWindow, height);
             viewport.Width = mainWindow.ClientSize.Width;
@@ -167,7 +141,7 @@ namespace P2DEngine
         }
 
         // Cambiar directamente el tamaño de la ventana, sin necesariamente respetar la relación de aspecto.
-        protected void ChangeScreenSize(int width, int height)
+        public static void ChangeScreenSize(int width, int height)
         {
             mainWindow.ChangeSize(mainWindow, width, height);
             viewport.Width = mainWindow.ClientSize.Width;
@@ -178,32 +152,101 @@ namespace P2DEngine
             RescaleElements();
         }
 
-        
         // Cada vez que cambiamos el tamaño de la ventana, debemos preocuparnos de que los objetos puedan escalarse al tamaño de la nueva ventana.
-        protected void RescaleElements()
+        public static void RescaleElements()
         {
-            // Relación de aspecto del viewport.
-            var xRatio = viewport.Width / oldViewportSize.X;
-            var yRatio = viewport.Height / oldViewportSize.Y;
+            // Actualizamos los datos para todas las escenas y background layer.
+            Dictionary<string, P2DScene> scenes = P2DSceneManager.GetScenes();
+            var layers = P2DBackgroundManager.layers;
+            
+            // Recuerde que "var" es casteo automático: si yo digo var i = 1, i será un int, var j = 1.0f, j es float.
 
-            foreach(var layer in P2DBackgroundManager.layers)
+            foreach(KeyValuePair<string, P2DScene> kvp in scenes)
             {
-                var newWidth = layer.Size.X * xRatio;
-                var newHeight = layer.Size.Y * yRatio;
+                var scene = kvp.Value;
+                var sceneObjects = scene.gameObjects;
+                var sceneUIObjects = scene.UIObjects;
+                foreach( var sceneObject in sceneObjects) // Reescalamos todos los objetos.
+                {
+                    RescaleObject(sceneObject);
+                }
 
-                layer.Size = new PointF(newWidth, newHeight);
-                layer.Position = new PointF((float)(layer.Position.X * xRatio), (float)((layer.Position.Y * yRatio)));
+                foreach( var sceneObject in sceneUIObjects)
+                {
+                    RescaleObject(sceneObject);
+                }
             }
 
-
-            foreach (P2DGameObject gameObject in gameObjects) // Reescalamos cada GameObject.
+            foreach (var layer in layers) // Reescalamos todas las layers
             {
-                var newWidth = gameObject.Size.X * xRatio;
-                var newHeight = gameObject.Size.Y * yRatio;
-
-                gameObject.Size = new PointF(newWidth, newHeight);
-                gameObject.Position = new PointF((float)(gameObject.Position.X * xRatio), (float)((gameObject.Position.Y * yRatio)));
+                RescaleLayer(layer);
             }
+
+        }
+
+        // Métodos auxiliares para ayudar con los cambios de tamaño de ventana con respecto a los gameObjects.
+        // uiObjects y background layers.
+        public static PointF ObjectToScreen(P2DGameObject obj)
+        {
+            var xRatio = P2DGame.viewport.X / oldViewportSize.Y;
+            var yRatio = P2DGame.viewport.X / oldViewportSize.Y;
+
+            var position = obj.Position;
+            return new PointF(position.X - viewport.X * xRatio, position.Y - viewport.Y * yRatio);
+        }
+
+        public static PointF ObjectToScreen(P2DUIObject obj)
+        {
+            var xRatio = P2DGame.viewport.X / oldViewportSize.Y;
+            var yRatio = P2DGame.viewport.X / oldViewportSize.Y;
+
+            var position = obj.Position;
+            return new PointF(position.X - viewport.X * xRatio, position.Y - viewport.Y * yRatio);
+        }
+
+        public static PointF LayerToScreen(P2DBackgroundLayer go)
+        {
+            var xRatio = P2DGame.viewport.Width / P2DGame.oldViewportSize.X;
+            var yRatio = P2DGame.viewport.Height / P2DGame.oldViewportSize.Y;
+
+            var position = go.Position;
+            return new PointF(position.X - viewport.X * xRatio, position.Y - viewport.Y * yRatio);
+        }
+
+        public static void RescaleObject(P2DGameObject go)
+        {
+            var xRatio = P2DGame.viewport.Width / P2DGame.oldViewportSize.X;
+            var yRatio = P2DGame.viewport.Height / P2DGame.oldViewportSize.Y;
+
+            var newWidth = go.Size.X * xRatio;
+            var newHeight = go.Size.Y * yRatio;
+
+            go.Size = new PointF(newWidth, newHeight);
+            go.Position = new PointF((float)(go.Position.X * xRatio), (float)(go.Position.Y * yRatio));
+        }
+
+        public static void RescaleObject(P2DUIObject go)
+        {
+            var xRatio = P2DGame.viewport.Width / P2DGame.oldViewportSize.X;
+            var yRatio = P2DGame.viewport.Height / P2DGame.oldViewportSize.Y;
+
+            var newWidth = go.Size.X * xRatio;
+            var newHeight = go.Size.Y * yRatio;
+
+            go.Size = new PointF(newWidth, newHeight);
+            go.Position = new PointF((float)(go.Position.X * xRatio), (float)(go.Position.Y * yRatio));
+        }
+
+        public static void RescaleLayer(P2DBackgroundLayer go)
+        {
+            var xRatio = P2DGame.viewport.Width / P2DGame.oldViewportSize.X;
+            var yRatio = P2DGame.viewport.Height / P2DGame.oldViewportSize.Y;
+
+            var newWidth = go.Size.X * xRatio;
+            var newHeight = go.Size.Y * yRatio;
+
+            go.Size = new PointF(newWidth, newHeight);
+            go.Position = new PointF((float)(go.Position.X * xRatio), (float)(go.Position.Y * yRatio));
         }
 
     }

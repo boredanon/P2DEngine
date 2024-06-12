@@ -10,6 +10,7 @@ namespace P2DEngine
     public abstract class P2DGameObject // Clase base para distintos objetos dentro del juego.
     {
         // Variables del objeto.
+
         public PointF Position { get; set; }
         public PointF Size { get; set; }
 
