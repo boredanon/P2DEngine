@@ -25,7 +25,7 @@ namespace P2DEngine
         protected int FPS { get; set; }
         protected float DeltaTime { get; set; }
 
-        protected static P2DViewport viewport { get; set; }
+        public static P2DViewport viewport { get; set; }
 
         protected static PointF oldViewportSize { get; set; }
 
@@ -188,17 +188,17 @@ namespace P2DEngine
         // uiObjects y background layers.
         public static PointF ObjectToScreen(P2DGameObject obj)
         {
-            var xRatio = P2DGame.viewport.X / oldViewportSize.Y;
-            var yRatio = P2DGame.viewport.X / oldViewportSize.Y;
+            var xRatio = P2DGame.viewport.Width / oldViewportSize.X;
+            var yRatio = P2DGame.viewport.Y / oldViewportSize.Y;
 
             var position = obj.Position;
-            return new PointF(position.X - viewport.X * xRatio, position.Y - viewport.Y * yRatio);
+            return new PointF(position.X - (viewport.X * xRatio), position.Y - (viewport.Y * yRatio));
         }
 
         public static PointF ObjectToScreen(P2DUIObject obj)
         {
-            var xRatio = P2DGame.viewport.X / oldViewportSize.Y;
-            var yRatio = P2DGame.viewport.X / oldViewportSize.Y;
+            var xRatio = P2DGame.viewport.Width / oldViewportSize.X;
+            var yRatio = P2DGame.viewport.Height / oldViewportSize.Y;
 
             var position = obj.Position;
             return new PointF(position.X - viewport.X * xRatio, position.Y - viewport.Y * yRatio);
