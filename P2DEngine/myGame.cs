@@ -12,45 +12,28 @@ using System.Windows.Forms;
 namespace P2DEngine
 {
     // Clase que tiene la lógica del juego.
-    public class myGame
+    public abstract class myGame
     {
         // La ventana.
         myWindow window;
-
-        // Posición del jugador.
-        int playerX = 0;
-        int playerY = 0;
-
-        // Posición de la pelota.
-        int ballX;
-        int ballY;
-
-        // Dirección de la pelota (ya que esta rebota).
-        int ballDx;
-        int ballDy;
-
-        // Tamaño de la pelota.
-        int ballSizeX;
-        int ballSizeY;
+        protected int windowWidth;
+        protected int windowHeight;
+        protected myCamera mainCamera;
 
         //Tiempo que nosotros queremos mantener. Ej. Si queremos jugar en 60 fps, deberíamos actualizar cada 16 milisegundos.
         int targetTime;
+
         
+
         // Inicializamos las variables en el constructor.
-        public myGame(int width, int height, int FPS) {
-            
+        public myGame(int width, int height, int FPS, myCamera c)
+        {
             targetTime = 1000 / FPS;
             window = new myWindow(width, height); // Creamos la ventana.
+            windowWidth = window.ClientSize.Width;
+            windowHeight = window.ClientSize.Height;
 
-            // Posicionamos la pelota.
-            ballX = width / 2;
-            ballY = height / 2;
-
-            ballDx = 1;
-            ballDy = 1;
-
-            ballSizeX = 20;
-            ballSizeY = 20;
+            mainCamera = c;
         }
 
         public void Start()
@@ -64,13 +47,13 @@ namespace P2DEngine
         }
 
         // Ciclo de juego.
-        public void GameLoop()
+        private void GameLoop()
         {
             var loop = true;
             while (loop)
             {
                 Stopwatch sw = new Stopwatch();
-                
+
                 // Este es el ciclo de juego: Procesamos los inputs -> actualizamos valores -> pintamos.
                 sw.Start();
                 ProcessInput();
@@ -79,9 +62,9 @@ namespace P2DEngine
                 sw.Stop();
 
                 int deltaTime = (int)(sw.ElapsedMilliseconds); // Tiempo que ocurre durante el frame.
-                
+
                 // Recuerde que queremos actualizar cada "targetTime", en nuestro motor, debemos calibrarlo.
-                int sleepTime = targetTime - deltaTime; 
+                int sleepTime = targetTime - deltaTime;
                 if (sleepTime < 0)
                 {
                     sleepTime = 1;
@@ -89,7 +72,7 @@ namespace P2DEngine
                 Thread.Sleep(sleepTime);
 
                 // Si cerramos la ventana.
-                if(window.IsDisposed)
+                if (window.IsDisposed)
                 {
                     loop = false;
                 }
@@ -98,66 +81,18 @@ namespace P2DEngine
         }
 
         // Primera parte del GameLoop: Procesar inputs.
-        private void ProcessInput()
-        {
-            // Ud. también podría tener una variable y actualizar los valores en el Update.
-            
-            int step = 10;
-            if (window.IsKeyPressed(Keys.W)) 
-            {
-                playerY -= step;
-            }
-
-
-            if(window.IsKeyPressed(Keys.S))
-            {
-                playerY += step;
-            }
-        }
+        protected abstract void ProcessInput();
 
         // Segunda parte del GameLoop: Actualizar valores.
-        public void Update()
+        protected abstract void Update();
+
+        private void Render()
         {
-            int step = 10;
-
-            // Movemos la pelota automáticamente.
-            ballX += ballDx * step;
-            ballY += ballDy * step;
-            
-            // Lógica de rebote de la pelota. Recuerde que la esquina superior izquierda es el 0,0.
-            if(ballY >= window.Height)
-            {
-                ballDy = -1;
-            }
-            if(ballY <= 0)
-            {
-                ballDy = 1;
-            }
-
-            if(ballX >= window.Width)
-            {
-                ballDx = -1;
-            }
-
-            if (ballX <= 0)
-            {
-                ballDx = 1;
-            }
+            RenderGame(window.GetGraphics());
+            window.Render();
         }
 
         // Tercera parte del GameLoop: Dibujar.
-        public void Render()
-        {
-            Graphics g = window.CreateGraphics(); // Propio de WinForms para dibujar.
-
-            //Dibujamos un fondo.
-            g.FillRectangle(new SolidBrush(Color.White), 0, 0, window.Width, window.Height);
-            
-            //Dibujamos a nuestro player.
-            g.FillRectangle(new SolidBrush(Color.Black), playerX, playerY, 20, 100);
-
-            //Dibujamos la pelota.
-            g.FillEllipse(new SolidBrush(Color.Red), ballX, ballY, ballSizeX, ballSizeY);
-        }
+        protected abstract void RenderGame(Graphics g);
     }
 }

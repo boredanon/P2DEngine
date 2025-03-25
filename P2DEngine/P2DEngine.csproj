@@ -36,10 +36,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="myCamera.cs" />
     <Compile Include="myGame.cs" />
+    <Compile Include="myInputManager.cs" />
     <Compile Include="myWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="NewGame.cs" />
+    <Compile Include="PongGame.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
