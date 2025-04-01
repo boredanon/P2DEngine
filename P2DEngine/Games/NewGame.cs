@@ -10,48 +10,48 @@ namespace P2DEngine
 {
     public class NewGame : myGame
     {
-        float playerX;
-        float playerY;
+        Player player;
+        Enemy enemy;
 
-        float playerSizeX;
-        float playerSizeY;
+        Random rand = new Random();
 
-        float enemyX;
-        float enemyY;
+        bool previousPressedSpace = false;
 
-        float enemySizeX;
-        float enemySizeY;  
+        myCamera camera2;
+
         public NewGame(int width, int height, int FPS, myCamera c) : base(width, height, FPS, c)
         {
-            playerX = 100;
-            playerY = 100;
+            player = new Player(100, 100, 100, 100, Color.Red);
+            enemy = new Enemy(100, 220, 100, 100, Color.Blue);
+            
+            Instantiate(enemy);
+            Instantiate(player);
 
-            enemyX = 1000;
-            enemyY = 200;
-
-            playerSizeX = playerSizeY = enemySizeX = enemySizeY = 100;
+            camera2 = new myCamera(0, 0, 800, 600, 1.0f);
         }
+
+
 
         protected override void ProcessInput()
         {
-            int step = 10;
+            int step = 100;
 
             // Mover al jugador.
-            if(myInputManager.IsKeyPressed(Keys.W))
+            if (myInputManager.IsKeyPressed(Keys.W))
             {
-                playerY -= step;
+                player.y -= step;
             }
             if (myInputManager.IsKeyPressed(Keys.A))
             {
-                playerX -= step;
+                player.x -= step;
             }
             if (myInputManager.IsKeyPressed(Keys.S))
             {
-                playerY += step;
+                player.y += step;
             }
             if (myInputManager.IsKeyPressed(Keys.D))
             {
-                playerX += step;
+                player.x += step;
             }
 
             // Mover a la cámara.
@@ -72,44 +72,52 @@ namespace P2DEngine
                 mainCamera.x += step;
             }
 
+            var pressedSpace = myInputManager.IsKeyPressed(Keys.Space);
+
+            if (myInputManager.IsKeyPressed(Keys.Space) && !previousPressedSpace)
+            {
+                // var newObject = new myBlock(rand.Next(100), rand.Next(100), 100, 100, Color.Purple);
+                //               Instantiate(newObject);
+                currentCamera = camera2;
+            }
+
             // Hacer zoom.
-            if(myInputManager.IsKeyPressed(Keys.Z))
+            if (myInputManager.IsKeyPressed(Keys.Z))
             {
                 mainCamera.zoom += 0.01f;
             }
-            if(myInputManager.IsKeyPressed (Keys.X))
+            if (myInputManager.IsKeyPressed(Keys.X))
             {
                 mainCamera.zoom -= 0.01f;
             }
+
+            previousPressedSpace = pressedSpace;
         }
 
         protected override void RenderGame(Graphics g)
         {
             g.FillRectangle(new SolidBrush(Color.White), 0, 0, windowWidth, windowHeight);
-
-
             // Añadimos las variables de mainCamera a la lógica de dibujado. Estamos
             // dibujando con respecto a la cámara.
-            g.FillRectangle(new SolidBrush(Color.Black), 
-                (playerX - mainCamera.x) * mainCamera.zoom, 
-                (playerY - mainCamera.y) * mainCamera.zoom, 
-                playerSizeX * mainCamera.zoom, 
-                playerSizeY * mainCamera.zoom);
 
-            g.FillRectangle(new SolidBrush(Color.Blue), 
-                (enemyX - mainCamera.x) * mainCamera.zoom, 
-                (enemyY - mainCamera.y) * mainCamera.zoom, 
-                enemySizeX * mainCamera.zoom, 
-                enemySizeY * mainCamera.zoom);
-            //throw new NotImplementedException();
+            foreach(var gameObject in gameObjects)
+            {
+                gameObject.Draw(g, 
+                    currentCamera.GetViewPosition(gameObject.x, gameObject.y),
+                    currentCamera.GetViewSize(gameObject.sizeX, gameObject.sizeY));
+            }
         }
 
         protected override void Update()
         {
-            // Centrar la cámara con respecto al player.
-            mainCamera.x = playerX - (windowWidth / (2 * mainCamera.zoom));
-            mainCamera.y = playerY - (windowHeight / (2 * mainCamera.zoom));
-            //throw new NotImplementedException();
+            foreach (var gameObject in gameObjects)
+            {
+                gameObject.Update(deltaTime);
+            }
+
+            currentCamera.x = player.x - (windowWidth / (2 * currentCamera.zoom));
+            currentCamera.y = player.y - (windowHeight / (2 * currentCamera.zoom));
+
         }
     }
 }

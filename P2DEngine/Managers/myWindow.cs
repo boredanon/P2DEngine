@@ -46,9 +46,17 @@ namespace P2DEngine
 
         }
 
+        // Dibujar.
         public void Render()
         {
-            managedBackBuffer.Render();
+            try
+            {
+                managedBackBuffer.Render();
+            }
+            catch (Exception ex)
+            {
+                Environment.Exit(0);
+            }
         }
 
         // Presionar un botón del mouse.

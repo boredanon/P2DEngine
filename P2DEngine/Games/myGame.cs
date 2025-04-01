@@ -19,10 +19,13 @@ namespace P2DEngine
         protected int windowWidth;
         protected int windowHeight;
         protected myCamera mainCamera;
+        protected myCamera currentCamera;
 
         //Tiempo que nosotros queremos mantener. Ej. Si queremos jugar en 60 fps, deberíamos actualizar cada 16 milisegundos.
         int targetTime;
+        protected float deltaTime;
 
+        protected List<myGameObject> gameObjects; // Estos son los objetos de nuestro juego.
         
 
         // Inicializamos las variables en el constructor.
@@ -33,7 +36,11 @@ namespace P2DEngine
             windowWidth = window.ClientSize.Width;
             windowHeight = window.ClientSize.Height;
 
+            gameObjects = new List<myGameObject>(); // Inicializamos la lista.
+
+            // Seteamos la cámara correcta.
             mainCamera = c;
+            currentCamera = mainCamera;
         }
 
         public void Start()
@@ -61,10 +68,15 @@ namespace P2DEngine
                 Render();
                 sw.Stop();
 
-                int deltaTime = (int)(sw.ElapsedMilliseconds); // Tiempo que ocurre durante el frame.
+                int frameTime = (int)(sw.ElapsedMilliseconds); // Tiempo que ocurre durante el frame.
 
                 // Recuerde que queremos actualizar cada "targetTime", en nuestro motor, debemos calibrarlo.
-                int sleepTime = targetTime - deltaTime;
+                int sleepTime = targetTime - frameTime;
+
+                deltaTime = (sleepTime + frameTime)/1000.0f; // Esto es aproximadamente el tiempo en segundos entre
+                // cada frame.
+
+                
                 if (sleepTime < 0)
                 {
                     sleepTime = 1;
@@ -78,6 +90,27 @@ namespace P2DEngine
                 }
             }
             Environment.Exit(0); // Propio de WinForms, es para cerrar la ventana.
+        }
+
+        // "Instanciar" un objeto implica añadirlo a la lista de gameObjects.
+        public myGameObject Instantiate(myGameObject go)
+        {
+            if (!gameObjects.Contains(go))
+            {
+                gameObjects.Add(go);
+            }
+            return go;
+        }
+
+        // Así mismo, destruir un objeto implica removerlo de la lista. IMPORTANTE: Recuerde que el objeto seguirá
+        // existiendo a no ser que usted lo desreferencie en su juego.
+        public myGameObject Destroy(myGameObject go)
+        {
+            if(gameObjects.Contains(go))
+            {
+                gameObjects.Remove(go);
+            }
+            return go;
         }
 
         // Primera parte del GameLoop: Procesar inputs.

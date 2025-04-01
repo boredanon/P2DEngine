@@ -36,14 +36,20 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameObjects\Enemy.cs" />
+    <Compile Include="Games\Indy500.cs" />
+    <Compile Include="GameObjects\myBlock.cs" />
     <Compile Include="myCamera.cs" />
-    <Compile Include="myGame.cs" />
-    <Compile Include="myInputManager.cs" />
-    <Compile Include="myWindow.cs">
+    <Compile Include="GameObjects\myCircle.cs" />
+    <Compile Include="Games\myGame.cs" />
+    <Compile Include="GameObjects\myGameObject.cs" />
+    <Compile Include="Managers\myInputManager.cs" />
+    <Compile Include="Managers\myWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewGame.cs" />
-    <Compile Include="PongGame.cs" />
+    <Compile Include="Games\NewGame.cs" />
+    <Compile Include="GameObjects\Player.cs" />
+    <Compile Include="Games\PongGame.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

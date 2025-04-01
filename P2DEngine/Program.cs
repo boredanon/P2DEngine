@@ -11,10 +11,24 @@ namespace P2DEngine
     {
         public static void Main(string[] args)
         {
-            // Crearemos una instancia de la clase myGame, que contiene la lógica del juego.
-            //PongGame game = new PongGame(800, 600, 60);
-            NewGame game = new NewGame(800, 600, 60, new myCamera(0, 0, 800, 600, 1.0f));
+            // Ancho y alto de la ventana.
+            int windowWidth = 800;
+            int windowHeight = 600;
+
+            // Ancho y alto de la cámara.
+            int camWidth = 800;
+            int camHeight = 600;
+
+            // Frames por segundo.
+            int FPS = 60;
+
+            NewGame game = new NewGame(windowWidth, windowHeight, FPS, 
+                new myCamera(0, 0, camWidth, camHeight, ((float)windowWidth / (float)camWidth)));
+
             
+            /*Indy500 game = new Indy500(windowWidth, windowHeight, FPS,
+                new myCamera(0, 0, camWidth, camHeight, ((float)windowWidth / (float)camWidth)));*/
+
             game.Start();
             
             // Esto es propio de WinForms, es básicamente para que la ventana fluya.
