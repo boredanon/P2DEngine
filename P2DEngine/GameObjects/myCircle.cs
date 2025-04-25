@@ -15,7 +15,13 @@ namespace P2DEngine
         {
         }
 
-        // ¿Cómo dibujamos un círculo?
+        public myCircle(float x, float y, float sizeX, float sizeY, Image image) : base(x, y, sizeX, sizeY, image)
+        {
+        }
+
+
+
+        // Añada usted la lógica de la imagen.
         public override void Draw(Graphics g, Vector position, Vector size)
         {
             g.FillEllipse(brush, (float)position.X, (float)position.Y, (float)size.X, (float)size.Y);

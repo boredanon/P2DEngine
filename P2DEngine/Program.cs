@@ -1,4 +1,6 @@
-﻿using System;
+﻿using P2DEngine.Games;
+using P2DEngine.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,12 +24,20 @@ namespace P2DEngine
             // Frames por segundo.
             int FPS = 60;
 
-            NewGame game = new NewGame(windowWidth, windowHeight, FPS, 
-                new myCamera(0, 0, camWidth, camHeight, ((float)windowWidth / (float)camWidth)));
 
+            // Cargado de recursos. Recuerden que como base se les va a caer ya que no existen estos recursos de ejemplo
+            // por eso está comentado. 
             
-            /*Indy500 game = new Indy500(windowWidth, windowHeight, FPS,
-                new myCamera(0, 0, camWidth, camHeight, ((float)windowWidth / (float)camWidth)));*/
+            /*myImageManager.Load("imagen.png", "imageId"); <- Cargar una imagen.
+            myImageManager.Load("imagen.jpg", "imageId2"); <- Recuerde la extensión.
+
+            myFontManager.Load("font.ttf", "fontId"); <- Cargar una fuente, formato .ttf
+
+            myAudioManager.Load("audio.mp3", "audioId"); <- Cargar un sonido.
+            myAudioManager.Load("audio.wav", "audioWav");*/
+
+            Game game = new Game(windowWidth, windowHeight, FPS, new myCamera(0, 0, camWidth, camHeight, 
+                (float)windowWidth/(float)camWidth));
 
             game.Start();
             
