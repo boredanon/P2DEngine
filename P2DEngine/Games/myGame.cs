@@ -64,7 +64,7 @@ namespace P2DEngine
                 // Este es el ciclo de juego: Procesamos los inputs -> actualizamos valores -> pintamos.
                 sw.Start();
                 ProcessInput();
-                Update();
+                UpdateGame();
                 Render();
                 sw.Stop();
 
@@ -119,13 +119,32 @@ namespace P2DEngine
         // Segunda parte del GameLoop: Actualizar valores.
         protected abstract void Update();
 
+        protected void UpdateGame()
+        {
+            foreach(var gameObjects in gameObjects)
+            {
+                gameObjects.Update(deltaTime);
+            }
+            Update();
+        }
         private void Render()
         {
-            RenderGame(window.GetGraphics());
+            DrawObjects(window.GetGraphics());
             window.Render();
         }
 
         // Tercera parte del GameLoop: Dibujar.
+        protected void DrawObjects(Graphics g)
+        {
+            foreach (var gameObject in gameObjects)
+            {
+                gameObject.Draw(g,
+                   currentCamera.GetViewPosition(gameObject.x, gameObject.y),
+                   currentCamera.GetViewSize(gameObject.sizeX, gameObject.sizeY));
+            }
+            RenderGame(g);
+        }
+
         protected abstract void RenderGame(Graphics g);
     }
 }

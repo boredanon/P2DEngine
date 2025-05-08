@@ -7,20 +7,26 @@ using System.Threading.Tasks;
 using System.Windows;
 using P2DEngine.GameObjects.Collisions;
 
-namespace P2DEngine
+namespace P2DEngine.GameObjects
 {
-    //Al igual que la clase myBlock, esta hereda de myGameObject, para poder dibujar círculos.
-    public class myCircle : myGameObject
+    public class myPhysicsCircle : myPhysicsGameObject
     {
+        // Todo esto es funcionalmente igual a lo que está en myCircle.cs, excepto que esta clase considera tener un collider.
+
         public float radius;
-        public myCircle(float x, float y, float radius, Color color) : base(x, y, radius*2, radius*2, color)
+        public myPhysicsCircle(float x, float y, float radius, Color color) : base(x, y, radius*2, radius*2, color)
         {
             this.radius = radius;
         }
 
-        public myCircle(float x, float y, float radius, Image image) : base(x, y, radius*2, radius*2, image)
+        public myPhysicsCircle(float x, float y, float radius, Image image) : base(x, y, radius*2, radius*2, image)
         {
-            this.radius = radius;
+            this.radius = radius; 
+        }
+
+        public override void CreateCollider(float sizeX, float sizeY)
+        { 
+            collider = new CircleCollider2D(sizeX/2, this);
         }
 
         public override void Draw(Graphics g, Vector position, Vector size)
@@ -35,9 +41,9 @@ namespace P2DEngine
             }
         }
 
-        public override void Update(float deltaTime)
+        public override void UpdateGameObject(float deltaTime)
         {
-
+            
         }
     }
 }

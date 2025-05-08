@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using P2DEngine.GameObjects.Collisions;
 
 namespace P2DEngine
 {
@@ -15,6 +16,10 @@ namespace P2DEngine
         public float y;
         public float sizeX;
         public float sizeY;
+
+        public float velocityX;
+        public float velocityY;
+
         public SolidBrush brush; // Para el pintado.
         public Image image;
 
@@ -38,9 +43,6 @@ namespace P2DEngine
             this.image = image;
         }
 
-
-
-        // Cáda GameObject que usemos deberá implementar su propio Draw y su propio Update.
         public abstract void Update(float deltaTime);
 
         public abstract void Draw(Graphics g, Vector position, Vector size);
@@ -54,5 +56,7 @@ namespace P2DEngine
         {
             this.image = image;
         }
+
+        
     }
 }
