@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using P2DEngine.GameObjects;
 using P2DEngine.GameObjects.Collisions;
 
 namespace P2DEngine
@@ -22,6 +23,7 @@ namespace P2DEngine
 
         public SolidBrush brush; // Para el pintado.
         public Image image;
+        public mySprite sprite;
 
         public myGameObject(float x, float y, float sizeX, float sizeY, Color color)
         {
@@ -31,6 +33,7 @@ namespace P2DEngine
             this.sizeY = sizeY;
             this.brush = new SolidBrush(color);
             image = null;
+            sprite = null;
         }
 
         public myGameObject(float x, float y, float sizeX, float sizeY, Image image)
@@ -41,6 +44,18 @@ namespace P2DEngine
             this.sizeY = sizeY;
             this.brush = new SolidBrush(Color.White);
             this.image = image;
+            sprite = null;
+        }
+
+        public myGameObject(float x, float y, float sizeX, float sizeY, mySprite sprite)
+        {
+            this.x = x;
+            this.y = y;
+            this.sizeX = sizeX;
+            this.sizeY = sizeY;
+            this.brush = new SolidBrush(Color.White);
+            this.image = null;
+            this.sprite = sprite;
         }
 
         public abstract void Update(float deltaTime);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using P2DEngine.GameObjects;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -19,22 +20,36 @@ namespace P2DEngine
         {
         }
 
-
+        public myBlock(float x, float y, float sizeX, float sizeY, mySprite sprite) : base(x, y, sizeX, sizeY, sprite)
+        {
+        }
 
         // ¿Cómo dibujamos un bloque?
         public override void Draw(Graphics g, Vector position, Vector size)
         {
-            if(image == null)
-                g.FillRectangle(brush, (float)position.X, (float)position.Y, 
+            if(sprite != null)
+            {
+                g.DrawImage(sprite.GetCurrentFrame(), (float)position.X, (float)position.Y,
                     (float)size.X, (float)size.Y);
+            }
+            else if(image != null)
+            {
+                g.DrawImage(image, (float)position.X, (float)position.Y,
+                    (float)size.X, (float)size.Y);
+            }
             else
-                g.DrawImage(image, (float)position.X, (float) position.Y, 
-                    (float)size.X, (float) size.Y);
+                g.FillRectangle(brush, (float)position.X, (float)position.Y,
+                    (float)size.X, (float)size.Y);
+                
         }
 
 
         public override void Update(float deltaTime)
         {
+            if(sprite != null) // Llamamos al update de la animación aquí.
+            {
+                sprite.Update(deltaTime);
+            }
         }
     }
 }

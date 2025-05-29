@@ -1,4 +1,5 @@
-﻿using System;
+﻿using P2DEngine.Managers;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -121,6 +122,10 @@ namespace P2DEngine
 
         protected void UpdateGame()
         {
+            foreach(var layer in myBackgroundManager.backgroundLayers)
+            {
+                layer.Update(deltaTime);
+            }
             foreach(var gameObjects in gameObjects)
             {
                 gameObjects.Update(deltaTime);
@@ -136,6 +141,10 @@ namespace P2DEngine
         // Tercera parte del GameLoop: Dibujar.
         protected void DrawObjects(Graphics g)
         {
+            foreach(var layer in myBackgroundManager.backgroundLayers)
+            {
+                layer.Draw(g, currentCamera);
+            }
             foreach (var gameObject in gameObjects)
             {
                 gameObject.Draw(g,

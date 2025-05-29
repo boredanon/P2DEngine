@@ -41,11 +41,14 @@
     <Compile Include="GameObjects\Collisions\CircleCollider2D.cs" />
     <Compile Include="GameObjects\Collisions\Collider2D.cs" />
     <Compile Include="GameObjects\Collisions\PointCollider2D.cs" />
+    <Compile Include="GameObjects\myBackgroundLayer.cs" />
     <Compile Include="GameObjects\myBlock.cs" />
     <Compile Include="GameObjects\myPhysicsCircle.cs" />
     <Compile Include="GameObjects\myPhysicsGameObject.cs" />
+    <Compile Include="GameObjects\mySprite.cs" />
     <Compile Include="Games\Game.cs" />
     <Compile Include="Managers\myAudioManager.cs" />
+    <Compile Include="Managers\myBackgroundManager.cs" />
     <Compile Include="Managers\myFontManager.cs" />
     <Compile Include="Managers\myImageManager.cs" />
     <Compile Include="myCamera.cs" />
