@@ -43,14 +43,20 @@
     <Compile Include="GameObjects\Collisions\PointCollider2D.cs" />
     <Compile Include="GameObjects\myBackgroundLayer.cs" />
     <Compile Include="GameObjects\myBlock.cs" />
+    <Compile Include="GameObjects\myParticleSystem.cs" />
     <Compile Include="GameObjects\myPhysicsCircle.cs" />
     <Compile Include="GameObjects\myPhysicsGameObject.cs" />
     <Compile Include="GameObjects\mySprite.cs" />
+    <Compile Include="GameObjects\Particle.cs" />
     <Compile Include="Games\Game.cs" />
+    <Compile Include="Games\myScene.cs" />
+    <Compile Include="Games\SceneGame\Scene1.cs" />
+    <Compile Include="Games\SceneGame\Scene2.cs" />
     <Compile Include="Managers\myAudioManager.cs" />
     <Compile Include="Managers\myBackgroundManager.cs" />
     <Compile Include="Managers\myFontManager.cs" />
     <Compile Include="Managers\myImageManager.cs" />
+    <Compile Include="Managers\mySceneManager.cs" />
     <Compile Include="myCamera.cs" />
     <Compile Include="GameObjects\myCircle.cs" />
     <Compile Include="Games\myGame.cs" />
@@ -60,6 +66,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GameObjects\myPhysicsBlock.cs" />
+    <Compile Include="GameObjects\myExplosion.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -100,5 +107,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

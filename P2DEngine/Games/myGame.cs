@@ -12,22 +12,20 @@ using System.Windows.Forms;
 
 namespace P2DEngine
 {
-    // Clase que tiene la lógica del juego.
+    // Clase que tiene la lógica del juego. Eliminamos todo lo del manejo de gameObjects, ya que se movió a la clase myScene.
     public abstract class myGame
     {
         // La ventana.
         myWindow window;
-        protected int windowWidth;
-        protected int windowHeight;
-        protected myCamera mainCamera;
-        protected myCamera currentCamera;
+        public static int windowWidth;
+        public static int windowHeight;
+        
 
         //Tiempo que nosotros queremos mantener. Ej. Si queremos jugar en 60 fps, deberíamos actualizar cada 16 milisegundos.
         int targetTime;
         protected float deltaTime;
 
-        protected List<myGameObject> gameObjects; // Estos son los objetos de nuestro juego.
-        
+
 
         // Inicializamos las variables en el constructor.
         public myGame(int width, int height, int FPS, myCamera c)
@@ -36,12 +34,6 @@ namespace P2DEngine
             window = new myWindow(width, height); // Creamos la ventana.
             windowWidth = window.ClientSize.Width;
             windowHeight = window.ClientSize.Height;
-
-            gameObjects = new List<myGameObject>(); // Inicializamos la lista.
-
-            // Seteamos la cámara correcta.
-            mainCamera = c;
-            currentCamera = mainCamera;
         }
 
         public void Start()
@@ -66,7 +58,7 @@ namespace P2DEngine
                 sw.Start();
                 ProcessInput();
                 UpdateGame();
-                Render();
+                Render(window.GetGraphics());
                 sw.Stop();
 
                 int frameTime = (int)(sw.ElapsedMilliseconds); // Tiempo que ocurre durante el frame.
@@ -93,67 +85,50 @@ namespace P2DEngine
             Environment.Exit(0); // Propio de WinForms, es para cerrar la ventana.
         }
 
-        // "Instanciar" un objeto implica añadirlo a la lista de gameObjects.
-        public myGameObject Instantiate(myGameObject go)
-        {
-            if (!gameObjects.Contains(go))
-            {
-                gameObjects.Add(go);
-            }
-            return go;
-        }
-
-        // Así mismo, destruir un objeto implica removerlo de la lista. IMPORTANTE: Recuerde que el objeto seguirá
-        // existiendo a no ser que usted lo desreferencie en su juego.
-        public myGameObject Destroy(myGameObject go)
-        {
-            if(gameObjects.Contains(go))
-            {
-                gameObjects.Remove(go);
-            }
-            return go;
-        }
-
         // Primera parte del GameLoop: Procesar inputs.
-        protected abstract void ProcessInput();
+        protected virtual void ProcessInput()
+        {
+            mySceneManager.GetActiveScene().ProcessInput();
+        }
 
         // Segunda parte del GameLoop: Actualizar valores.
-        protected abstract void Update();
-
-        protected void UpdateGame()
+        protected virtual void Update()
         {
-            foreach(var layer in myBackgroundManager.backgroundLayers)
+            mySceneManager.GetActiveScene().Update(deltaTime);
+        }
+
+        protected virtual void Render(Graphics g) // Dibujamos la escena actual.
+        {
+            var activeScene = mySceneManager.GetActiveScene();
+            var backgroundLayers = myBackgroundManager.GetLayers(activeScene);
+            foreach(var layer in backgroundLayers)
+            {
+                layer.Draw(g, activeScene.currentCamera);
+            }
+            foreach(var gameObject in activeScene.gameObjects)
+            {
+                gameObject.Draw(g,
+                    activeScene.currentCamera.GetViewPosition(gameObject.x, gameObject.y),
+                    activeScene.currentCamera.GetViewSize(gameObject.sizeX, gameObject.sizeY));
+            }
+            mySceneManager.GetActiveScene().Render(g);
+            window.Render();
+        }
+
+
+        protected void UpdateGame() // Actualizamos los valores solo de la escena actual.
+        {
+            var activeScene = mySceneManager.GetActiveScene();
+            var backgroundLayers = myBackgroundManager.GetLayers(activeScene);
+            foreach(var layer in backgroundLayers)
             {
                 layer.Update(deltaTime);
             }
-            foreach(var gameObjects in gameObjects)
+            foreach (var gameObjects in activeScene.gameObjects)
             {
                 gameObjects.Update(deltaTime);
             }
             Update();
         }
-        private void Render()
-        {
-            DrawObjects(window.GetGraphics());
-            window.Render();
-        }
-
-        // Tercera parte del GameLoop: Dibujar.
-        protected void DrawObjects(Graphics g)
-        {
-            foreach(var layer in myBackgroundManager.backgroundLayers)
-            {
-                layer.Draw(g, currentCamera);
-            }
-            foreach (var gameObject in gameObjects)
-            {
-                gameObject.Draw(g,
-                   currentCamera.GetViewPosition(gameObject.x, gameObject.y),
-                   currentCamera.GetViewSize(gameObject.sizeX, gameObject.sizeY));
-            }
-            RenderGame(g);
-        }
-
-        protected abstract void RenderGame(Graphics g);
     }
 }

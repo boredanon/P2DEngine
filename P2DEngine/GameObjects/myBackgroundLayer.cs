@@ -11,6 +11,7 @@ namespace P2DEngine.GameObjects
     public class myBackgroundLayer
     {
         Image image;
+        SolidBrush color;
 
         public PointF position;
         public PointF size;
@@ -21,6 +22,14 @@ namespace P2DEngine.GameObjects
         public myBackgroundLayer(Image image, PointF size, float layerSpeed)
         {
             this.image = image;
+            this.size = size;
+            this.layerSpeed = layerSpeed;
+        }
+
+        public myBackgroundLayer(Color color, PointF size, float layerSpeed)
+        {
+            this.color = new SolidBrush(color);
+            this.image = null;
             this.size = size;
             this.layerSpeed = layerSpeed;
         }
@@ -56,11 +65,22 @@ namespace P2DEngine.GameObjects
 
             for(float x = baseX; x < c.width / c.zoom + size.X; x+=size.X)
             {
-                g.DrawImage(image, 
-                    x * c.zoom, 
-                    0, 
-                    size.X * c.zoom, 
-                    size.Y * c.zoom);
+                if (image != null)
+                {
+                    g.DrawImage(image,
+                        x * c.zoom,
+                        0,
+                        size.X * c.zoom,
+                        size.Y * c.zoom);
+                }
+                else
+                {
+                    g.FillRectangle(color,
+                        x * c.zoom,
+                        0,
+                        size.X * c.zoom,
+                        size.Y * c.zoom);
+                }
             }
 
             

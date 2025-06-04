@@ -72,6 +72,10 @@ namespace P2DEngine
             this.image = image;
         }
 
+        public void SetSprite(mySprite sprite)
+        {
+            this.sprite = sprite;
+        }
         
     }
 }

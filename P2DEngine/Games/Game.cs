@@ -7,36 +7,23 @@ using System.Text;
 using System.Threading.Tasks;
 using P2DEngine.GameObjects;
 using P2DEngine.GameObjects.Collisions;
+using P2DEngine.Games.SceneGame;
+using P2DEngine.Managers;
 
 namespace P2DEngine.Games
 {
     public class Game : myGame
     {
+        // Ahora aquí en las clase de juego se deben crear y registrar las escenas correspondientes.
         public Game(int width, int height, int FPS, myCamera c) : base(width, height, FPS, c)
         {
-            /*
-             * Para hacer animaciones, ud. tiene que;
-             * 1) Crear un objeto de tipo sprite.
-             * 2) Añadirle imágenes.
-             * 3) Asignarlas a un gameobject/physicsgameobject.
-             */
-        }
+            Scene1 s = new Scene1(c);
+            Scene2 s2 = new Scene2(c);
 
-        protected override void ProcessInput()
-        {
-        }
+            mySceneManager.Register(s, "Scene1");
+            mySceneManager.Register(s2, "Scene2");
 
-        // Hice un pequeño cambio en el código de myGame.cs, ahora no deberían tener que escribir el loop
-        // para dibujar cada objeto en cada juego que hacen. Sin embargo, si quieren hacer juegos de cámaras deben buscar la forma
-        // de hacerlo uds. cambiando la variable "currentCamera".
-        protected override void RenderGame(Graphics g)
-        {
-        }
-
-        // Lo mismo para el Update.
-        protected override void Update()
-        {
-            // En este motor, solo los physicsGameObject tienen colisión.
+            mySceneManager.SetActive("Scene1");
         }
     }
 }
