@@ -21,6 +21,8 @@ namespace P2DEngine.GameObjects.Collisions
 
         public BoxCollider2D(float width, float height, myGameObject attachedGameObject) : base(attachedGameObject)
         {
+            this.x = attachedGameObject.x;
+            this.y = attachedGameObject.y;
             this.width = width;
             this.height = height;
         }

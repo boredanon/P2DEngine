@@ -27,7 +27,7 @@ namespace P2DEngine.Games.SceneGame
         {
             if (myInputManager.IsKeyPressed(Keys.X)) // Volver a la escena 1, pero reiniciando los valores.
             {
-                mySceneManager.SetActive("Scene1", true);
+                mySceneManager.SetActive("Scene1");
             }
         }
 

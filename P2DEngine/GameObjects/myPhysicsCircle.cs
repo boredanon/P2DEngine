@@ -41,6 +41,18 @@ namespace P2DEngine.GameObjects
             }
         }
 
+        public override void OnCollisionEnter2D(myPhysicsGameObject other)
+        {
+        }
+
+        public override void OnCollisionExit2D(myPhysicsGameObject other)
+        {
+        }
+
+        public override void OnCollisionStay2D(myPhysicsGameObject other)
+        {
+        }
+
         public override void UpdateGameObject(float deltaTime)
         {
             

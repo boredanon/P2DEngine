@@ -36,7 +36,10 @@ namespace P2DEngine
             myAudioManager.Load("audio.mp3", "audioId"); <- Cargar un sonido.
             myAudioManager.Load("audio.wav", "audioWav");*/
 
-            Game game = new Game(windowWidth, windowHeight, FPS, new myCamera(0, 0, camWidth, camHeight, 
+            /*Game game = new Game(windowWidth, windowHeight, FPS, new myCamera(0, 0, camWidth, camHeight, 
+                (float)windowWidth/(float)camWidth));*/
+
+            JuegoEjemplo game = new JuegoEjemplo(windowWidth, windowHeight, FPS, new myCamera(0, 0, camWidth, camHeight,
                 (float)windowWidth/(float)camWidth));
 
             game.Start();

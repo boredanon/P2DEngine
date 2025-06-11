@@ -107,7 +107,7 @@ namespace P2DEngine.Games.SceneGame
             }
             else if(left)
             {
-                currentCamera.y -= 10f;
+                currentCamera.x -= 10f;
             }
 
             var mousePosition = myInputManager.mousePosition;
